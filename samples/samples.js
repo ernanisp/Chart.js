@@ -113,6 +113,9 @@
 			title: 'Line (point data)',
 			path: 'scales/time/line-point-data.html'
 		}, {
+			title: 'Time Series',
+			path: 'scales/time/financial.html'
+		}, {
 			title: 'Combo',
 			path: 'scales/time/combo.html'
 		}]
@@ -133,6 +136,9 @@
 		}, {
 			title: 'Non numeric Y Axis',
 			path: 'scales/non-numeric-y.html'
+		}, {
+			title: 'Toggle Scale Type',
+			path: 'scales/toggle-scale-type.html'
 		}]
 	}, {
 		title: 'Legend',
@@ -168,13 +174,19 @@
 			path: 'tooltips/custom-points.html'
 		}]
 	}, {
+		title: 'Scriptable',
+		items: [{
+			title: 'Bar Chart',
+			path: 'scriptable/bar.html'
+		}, {
+			title: 'Bubble Chart',
+			path: 'scriptable/bubble.html'
+		}]
+	}, {
 		title: 'Advanced',
 		items: [{
 			title: 'Progress bar',
 			path: 'advanced/progress-bar.html'
-		}, {
-			title: 'Data labelling (plugin)',
-			path: 'advanced/data-labelling.html'
 		}]
 	}];
 

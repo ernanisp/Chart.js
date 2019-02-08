@@ -1,5 +1,3 @@
-/* global Chart */
-
 'use strict';
 
 window.chartColors = {
@@ -12,12 +10,8 @@ window.chartColors = {
 	grey: 'rgb(201, 203, 207)'
 };
 
-window.randomScalingFactor = function() {
-	return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
-};
-
 (function(global) {
-	var Months = [
+	var MONTHS = [
 		'January',
 		'February',
 		'March',
@@ -32,7 +26,21 @@ window.randomScalingFactor = function() {
 		'December'
 	];
 
+	var COLORS = [
+		'#4dc9f6',
+		'#f67019',
+		'#f53794',
+		'#537bc4',
+		'#acc236',
+		'#166a8f',
+		'#00a950',
+		'#58595b',
+		'#8549ba'
+	];
+
 	var Samples = global.Samples || (global.Samples = {});
+	var Color = global.Color;
+
 	Samples.utils = {
 		// Adapted from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
 		srand: function(seed) {
@@ -98,22 +106,42 @@ window.randomScalingFactor = function() {
 			var i, value;
 
 			for (i = 0; i < count; ++i) {
-				value = Months[Math.ceil(i) % 12];
+				value = MONTHS[Math.ceil(i) % 12];
 				values.push(value.substring(0, section));
 			}
 
 			return values;
 		},
 
-		transparentize: function(color, opacity) {
-			var alpha = opacity === undefined ? 0.5 : 1 - opacity;
-			return Chart.helpers.color(color).alpha(alpha).rgbString();
+		color: function(index) {
+			return COLORS[index % COLORS.length];
 		},
 
-		merge: Chart.helpers.configMerge
+		transparentize: function(color, opacity) {
+			var alpha = opacity === undefined ? 0.5 : 1 - opacity;
+			return Color(color).alpha(alpha).rgbString();
+		}
 	};
+
+	// DEPRECATED
+	window.randomScalingFactor = function() {
+		return Math.round(Samples.utils.rand(-100, 100));
+	};
+
+	// INITIALIZATION
 
 	Samples.utils.srand(Date.now());
 
-}(this));
+	// Google Analytics
+	/* eslint-disable */
+	if (document.location.hostname.match(/^(www\.)?chartjs\.org$/)) {
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-28909194-3', 'auto');
+		ga('send', 'pageview');
+	}
+	/* eslint-enable */
 
+}(this));

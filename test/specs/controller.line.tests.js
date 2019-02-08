@@ -1,5 +1,10 @@
-// Test the line controller
-describe('Line controller tests', function() {
+describe('Chart.controllers.line', function() {
+	describe('auto', jasmine.fixture.specs('controller.line'));
+
+	it('should be registered as dataset controller', function() {
+		expect(typeof Chart.controllers.line).toBe('function');
+	});
+
 	it('should be constructed', function() {
 		var chart = window.acquireChart({
 			type: 'line',
@@ -175,6 +180,8 @@ describe('Line controller tests', function() {
 			},
 			options: {
 				showLines: true,
+				legend: false,
+				title: false,
 				elements: {
 					point: {
 						backgroundColor: 'red',
@@ -183,10 +190,12 @@ describe('Line controller tests', function() {
 				},
 				scales: {
 					xAxes: [{
-						id: 'firstXScaleID'
+						id: 'firstXScaleID',
+						display: false
 					}],
 					yAxes: [{
-						id: 'firstYScaleID'
+						id: 'firstYScaleID',
+						display: false
 					}]
 				}
 			},
@@ -203,8 +212,8 @@ describe('Line controller tests', function() {
 
 
 		[
-			{x: 33, y: 484},
-			{x: 186, y: 32}
+			{x: 0, y: 512},
+			{x: 171, y: 0}
 		].forEach(function(expected, i) {
 			expect(meta.data[i]._datasetIndex).toBe(0);
 			expect(meta.data[i]._index).toBe(i);
@@ -234,11 +243,17 @@ describe('Line controller tests', function() {
 				}]
 			},
 			options: {
+				legend: false,
+				title: false,
 				hover: {
 					mode: 'single'
 				},
 				scales: {
+					xAxes: [{
+						display: false,
+					}],
 					yAxes: [{
+						display: false,
 						ticks: {
 							beginAtZero: true
 						}
@@ -250,7 +265,7 @@ describe('Line controller tests', function() {
 		var meta = chart.getDatasetMeta(0);
 		// 1 point
 		var point = meta.data[0];
-		expect(point._model.x).toBeCloseToPixel(262);
+		expect(point._model.x).toBeCloseToPixel(0);
 
 		// 2 points
 		chart.data.labels = ['One', 'Two'];
@@ -259,8 +274,8 @@ describe('Line controller tests', function() {
 
 		var points = meta.data;
 
-		expect(points[0]._model.x).toBeCloseToPixel(27);
-		expect(points[1]._model.x).toBeCloseToPixel(498);
+		expect(points[0]._model.x).toBeCloseToPixel(0);
+		expect(points[1]._model.x).toBeCloseToPixel(512);
 
 		// 3 points
 		chart.data.labels = ['One', 'Two', 'Three'];
@@ -269,9 +284,9 @@ describe('Line controller tests', function() {
 
 		points = meta.data;
 
-		expect(points[0]._model.x).toBeCloseToPixel(27);
-		expect(points[1]._model.x).toBeCloseToPixel(260);
-		expect(points[2]._model.x).toBeCloseToPixel(493);
+		expect(points[0]._model.x).toBeCloseToPixel(0);
+		expect(points[1]._model.x).toBeCloseToPixel(256);
+		expect(points[2]._model.x).toBeCloseToPixel(512);
 
 		// 4 points
 		chart.data.labels = ['One', 'Two', 'Three', 'Four'];
@@ -280,10 +295,10 @@ describe('Line controller tests', function() {
 
 		points = meta.data;
 
-		expect(points[0]._model.x).toBeCloseToPixel(27);
-		expect(points[1]._model.x).toBeCloseToPixel(184);
+		expect(points[0]._model.x).toBeCloseToPixel(0);
+		expect(points[1]._model.x).toBeCloseToPixel(171);
 		expect(points[2]._model.x).toBeCloseToPixel(340);
-		expect(points[3]._model.x).toBeCloseToPixel(497);
+		expect(points[3]._model.x).toBeCloseToPixel(512);
 	});
 
 	it('should update elements when the y scale is stacked', function() {
@@ -300,8 +315,14 @@ describe('Line controller tests', function() {
 				labels: ['label1', 'label2', 'label3', 'label4']
 			},
 			options: {
+				legend: false,
+				title: false,
 				scales: {
+					xAxes: [{
+						display: false,
+					}],
 					yAxes: [{
+						display: false,
 						stacked: true
 					}]
 				}
@@ -311,10 +332,10 @@ describe('Line controller tests', function() {
 		var meta0 = chart.getDatasetMeta(0);
 
 		[
-			{x: 28, y: 161},
-			{x: 183, y: 419},
-			{x: 338, y: 161},
-			{x: 492, y: 419}
+			{x: 0, y: 146},
+			{x: 171, y: 439},
+			{x: 341, y: 146},
+			{x: 512, y: 439}
 		].forEach(function(values, i) {
 			expect(meta0.data[i]._model.x).toBeCloseToPixel(values.x);
 			expect(meta0.data[i]._model.y).toBeCloseToPixel(values.y);
@@ -323,10 +344,10 @@ describe('Line controller tests', function() {
 		var meta1 = chart.getDatasetMeta(1);
 
 		[
-			{x: 28, y: 32},
-			{x: 183, y: 97},
-			{x: 338, y: 161},
-			{x: 492, y: 471}
+			{x: 0, y: 0},
+			{x: 171, y: 73},
+			{x: 341, y: 146},
+			{x: 512, y: 497}
 		].forEach(function(values, i) {
 			expect(meta1.data[i]._model.x).toBeCloseToPixel(values.x);
 			expect(meta1.data[i]._model.y).toBeCloseToPixel(values.y);
@@ -352,12 +373,19 @@ describe('Line controller tests', function() {
 				labels: ['label1', 'label2', 'label3', 'label4']
 			},
 			options: {
+				legend: false,
+				title: false,
 				scales: {
+					xAxes: [{
+						display: false,
+					}],
 					yAxes: [{
+						display: false,
 						stacked: true
 					}, {
+						id: 'secondAxis',
 						type: 'linear',
-						id: 'secondAxis'
+						display: false
 					}]
 				}
 			}
@@ -366,10 +394,10 @@ describe('Line controller tests', function() {
 		var meta0 = chart.getDatasetMeta(0);
 
 		[
-			{x: 56, y: 161},
-			{x: 202, y: 419},
-			{x: 347, y: 161},
-			{x: 492, y: 419}
+			{x: 0, y: 146},
+			{x: 171, y: 439},
+			{x: 341, y: 146},
+			{x: 512, y: 439}
 		].forEach(function(values, i) {
 			expect(meta0.data[i]._model.x).toBeCloseToPixel(values.x);
 			expect(meta0.data[i]._model.y).toBeCloseToPixel(values.y);
@@ -378,10 +406,10 @@ describe('Line controller tests', function() {
 		var meta1 = chart.getDatasetMeta(1);
 
 		[
-			{x: 56, y: 32},
-			{x: 202, y: 97},
-			{x: 347, y: 161},
-			{x: 492, y: 471}
+			{x: 0, y: 0},
+			{x: 171, y: 73},
+			{x: 341, y: 146},
+			{x: 512, y: 497}
 		].forEach(function(values, i) {
 			expect(meta1.data[i]._model.x).toBeCloseToPixel(values.x);
 			expect(meta1.data[i]._model.y).toBeCloseToPixel(values.y);
@@ -427,8 +455,14 @@ describe('Line controller tests', function() {
 				labels: ['label1', 'label2', 'label3', 'label4']
 			},
 			options: {
+				legend: false,
+				title: false,
 				scales: {
+					xAxes: [{
+						display: false,
+					}],
 					yAxes: [{
+						display: false,
 						stacked: true
 					}]
 				}
@@ -438,10 +472,10 @@ describe('Line controller tests', function() {
 		var meta0 = chart.getDatasetMeta(0);
 
 		[
-			{x: 28, y: 161},
-			{x: 183, y: 419},
-			{x: 338, y: 161},
-			{x: 492, y: 419}
+			{x: 0, y: 146},
+			{x: 171, y: 439},
+			{x: 341, y: 146},
+			{x: 512, y: 439}
 		].forEach(function(values, i) {
 			expect(meta0.data[i]._model.x).toBeCloseToPixel(values.x);
 			expect(meta0.data[i]._model.y).toBeCloseToPixel(values.y);
@@ -450,10 +484,10 @@ describe('Line controller tests', function() {
 		var meta1 = chart.getDatasetMeta(1);
 
 		[
-			{x: 28, y: 32},
-			{x: 183, y: 97},
-			{x: 338, y: 161},
-			{x: 492, y: 471}
+			{x: 0, y: 0},
+			{x: 171, y: 73},
+			{x: 341, y: 146},
+			{x: 512, y: 497}
 		].forEach(function(values, i) {
 			expect(meta1.data[i]._model.x).toBeCloseToPixel(values.x);
 			expect(meta1.data[i]._model.y).toBeCloseToPixel(values.y);
@@ -475,8 +509,14 @@ describe('Line controller tests', function() {
 				labels: ['label1', 'label2', 'label3', 'label4']
 			},
 			options: {
+				legend: false,
+				title: false,
 				scales: {
+					xAxes: [{
+						display: false,
+					}],
 					yAxes: [{
+						display: false,
 						stacked: true
 					}]
 				}
@@ -486,10 +526,10 @@ describe('Line controller tests', function() {
 		var meta0 = chart.getDatasetMeta(0);
 
 		[
-			{x: 28, y: 161},
-			{x: 183, y: 419},
-			{x: 338, y: 161},
-			{x: 492, y: 419}
+			{x: 0, y: 146},
+			{x: 171, y: 439},
+			{x: 341, y: 146},
+			{x: 512, y: 439}
 		].forEach(function(values, i) {
 			expect(meta0.data[i]._model.x).toBeCloseToPixel(values.x);
 			expect(meta0.data[i]._model.y).toBeCloseToPixel(values.y);
@@ -498,10 +538,10 @@ describe('Line controller tests', function() {
 		var meta1 = chart.getDatasetMeta(1);
 
 		[
-			{x: 28, y: 32},
-			{x: 183, y: 97},
-			{x: 338, y: 161},
-			{x: 492, y: 471}
+			{x: 0, y: 0},
+			{x: 171, y: 73},
+			{x: 341, y: 146},
+			{x: 512, y: 497}
 		].forEach(function(values, i) {
 			expect(meta1.data[i]._model.x).toBeCloseToPixel(values.x);
 			expect(meta1.data[i]._model.y).toBeCloseToPixel(values.y);
@@ -563,153 +603,123 @@ describe('Line controller tests', function() {
 		expect(meta.data[4] instanceof Chart.elements.Point).toBe(true);
 	});
 
-	it('should set point hover styles', function() {
-		var chart = window.acquireChart({
-			type: 'line',
-			data: {
-				datasets: [{
-					data: [10, 15, 0, -4],
-					label: 'dataset1',
-				}],
-				labels: ['label1', 'label2', 'label3', 'label4']
-			},
-			options: {
-				elements: {
-					point: {
-						backgroundColor: 'rgb(255, 255, 0)',
-						borderWidth: 1,
-						borderColor: 'rgb(255, 255, 255)',
-						hitRadius: 1,
-						hoverRadius: 4,
-						hoverBorderWidth: 1,
-						radius: 3,
+	describe('Interactions', function() {
+		beforeEach(function() {
+			this.chart = window.acquireChart({
+				type: 'line',
+				data: {
+					labels: ['label1', 'label2', 'label3', 'label4'],
+					datasets: [{
+						data: [10, 15, 0, -4]
+					}]
+				},
+				options: {
+					elements: {
+						point: {
+							backgroundColor: 'rgb(100, 150, 200)',
+							borderColor: 'rgb(50, 100, 150)',
+							borderWidth: 2,
+							radius: 3
+						}
 					}
 				}
-			}
+			});
 		});
 
-		var meta = chart.getDatasetMeta(0);
-		var point = meta.data[0];
+		it ('should handle default hover styles', function() {
+			var chart = this.chart;
+			var point = chart.getDatasetMeta(0).data[0];
 
-		meta.controller.setHoverStyle(point);
-		expect(point._model.backgroundColor).toBe('rgb(229, 230, 0)');
-		expect(point._model.borderColor).toBe('rgb(230, 230, 230)');
-		expect(point._model.borderWidth).toBe(1);
-		expect(point._model.radius).toBe(4);
+			jasmine.triggerMouseEvent(chart, 'mousemove', point);
+			expect(point._model.backgroundColor).toBe('rgb(49, 135, 221)');
+			expect(point._model.borderColor).toBe('rgb(22, 89, 156)');
+			expect(point._model.borderWidth).toBe(1);
+			expect(point._model.radius).toBe(4);
 
-		// Can set hover style per dataset
-		chart.data.datasets[0].pointHoverRadius = 3.3;
-		chart.data.datasets[0].pointHoverBackgroundColor = 'rgb(77, 79, 81)';
-		chart.data.datasets[0].pointHoverBorderColor = 'rgb(123, 125, 127)';
-		chart.data.datasets[0].pointHoverBorderWidth = 2.1;
-
-		meta.controller.setHoverStyle(point);
-		expect(point._model.backgroundColor).toBe('rgb(77, 79, 81)');
-		expect(point._model.borderColor).toBe('rgb(123, 125, 127)');
-		expect(point._model.borderWidth).toBe(2.1);
-		expect(point._model.radius).toBe(3.3);
-
-		// Use the consistent name "pointRadius", setting but overwriting
-		// another value in "radius"
-		chart.data.datasets[0].pointRadius = 250;
-		chart.data.datasets[0].radius = 20;
-
-		meta.controller.setHoverStyle(point);
-		expect(point._model.backgroundColor).toBe('rgb(77, 79, 81)');
-		expect(point._model.borderColor).toBe('rgb(123, 125, 127)');
-		expect(point._model.borderWidth).toBe(2.1);
-		expect(point._model.radius).toBe(3.3);
-
-		// Custom style
-		point.custom = {
-			hoverRadius: 4.4,
-			hoverBorderWidth: 5.5,
-			hoverBackgroundColor: 'rgb(0, 0, 0)',
-			hoverBorderColor: 'rgb(10, 10, 10)'
-		};
-
-		meta.controller.setHoverStyle(point);
-		expect(point._model.backgroundColor).toBe('rgb(0, 0, 0)');
-		expect(point._model.borderColor).toBe('rgb(10, 10, 10)');
-		expect(point._model.borderWidth).toBe(5.5);
-		expect(point._model.radius).toBe(4.4);
-	});
-
-	it('should remove hover styles', function() {
-		var chart = window.acquireChart({
-			type: 'line',
-			data: {
-				datasets: [{
-					data: [10, 15, 0, -4],
-					label: 'dataset1',
-				}],
-				labels: ['label1', 'label2', 'label3', 'label4']
-			},
-			options: {
-				elements: {
-					point: {
-						backgroundColor: 'rgb(255, 255, 0)',
-						borderWidth: 1,
-						borderColor: 'rgb(255, 255, 255)',
-						hitRadius: 1,
-						hoverRadius: 4,
-						hoverBorderWidth: 1,
-						radius: 3,
-					}
-				}
-			}
+			jasmine.triggerMouseEvent(chart, 'mouseout', point);
+			expect(point._model.backgroundColor).toBe('rgb(100, 150, 200)');
+			expect(point._model.borderColor).toBe('rgb(50, 100, 150)');
+			expect(point._model.borderWidth).toBe(2);
+			expect(point._model.radius).toBe(3);
 		});
 
-		var meta = chart.getDatasetMeta(0);
-		var point = meta.data[0];
+		it ('should handle hover styles defined via dataset properties', function() {
+			var chart = this.chart;
+			var point = chart.getDatasetMeta(0).data[0];
 
-		chart.options.elements.point.backgroundColor = 'rgb(45, 46, 47)';
-		chart.options.elements.point.borderColor = 'rgb(50, 51, 52)';
-		chart.options.elements.point.borderWidth = 10.1;
-		chart.options.elements.point.radius = 1.01;
+			Chart.helpers.merge(chart.data.datasets[0], {
+				hoverBackgroundColor: 'rgb(200, 100, 150)',
+				hoverBorderColor: 'rgb(150, 50, 100)',
+				hoverBorderWidth: 8.4,
+				hoverRadius: 4.2
+			});
 
-		meta.controller.removeHoverStyle(point);
-		expect(point._model.backgroundColor).toBe('rgb(45, 46, 47)');
-		expect(point._model.borderColor).toBe('rgb(50, 51, 52)');
-		expect(point._model.borderWidth).toBe(10.1);
-		expect(point._model.radius).toBe(1.01);
+			chart.update();
 
-		// Can set hover style per dataset
-		chart.data.datasets[0].radius = 3.3;
-		chart.data.datasets[0].pointBackgroundColor = 'rgb(77, 79, 81)';
-		chart.data.datasets[0].pointBorderColor = 'rgb(123, 125, 127)';
-		chart.data.datasets[0].pointBorderWidth = 2.1;
+			jasmine.triggerMouseEvent(chart, 'mousemove', point);
+			expect(point._model.backgroundColor).toBe('rgb(200, 100, 150)');
+			expect(point._model.borderColor).toBe('rgb(150, 50, 100)');
+			expect(point._model.borderWidth).toBe(8.4);
+			expect(point._model.radius).toBe(4.2);
 
-		meta.controller.removeHoverStyle(point);
-		expect(point._model.backgroundColor).toBe('rgb(77, 79, 81)');
-		expect(point._model.borderColor).toBe('rgb(123, 125, 127)');
-		expect(point._model.borderWidth).toBe(2.1);
-		expect(point._model.radius).toBe(3.3);
+			jasmine.triggerMouseEvent(chart, 'mouseout', point);
+			expect(point._model.backgroundColor).toBe('rgb(100, 150, 200)');
+			expect(point._model.borderColor).toBe('rgb(50, 100, 150)');
+			expect(point._model.borderWidth).toBe(2);
+			expect(point._model.radius).toBe(3);
+		});
 
-		// Use the consistent name "pointRadius", setting but overwriting
-		// another value in "radius"
-		chart.data.datasets[0].pointRadius = 250;
-		chart.data.datasets[0].radius = 20;
+		it ('should handle hover styles defined via element options', function() {
+			var chart = this.chart;
+			var point = chart.getDatasetMeta(0).data[0];
 
-		meta.controller.removeHoverStyle(point);
-		expect(point._model.backgroundColor).toBe('rgb(77, 79, 81)');
-		expect(point._model.borderColor).toBe('rgb(123, 125, 127)');
-		expect(point._model.borderWidth).toBe(2.1);
-		expect(point._model.radius).toBe(250);
+			Chart.helpers.merge(chart.options.elements.point, {
+				hoverBackgroundColor: 'rgb(200, 100, 150)',
+				hoverBorderColor: 'rgb(150, 50, 100)',
+				hoverBorderWidth: 8.4,
+				hoverRadius: 4.2
+			});
 
-		// Custom style
-		point.custom = {
-			radius: 4.4,
-			borderWidth: 5.5,
-			backgroundColor: 'rgb(0, 0, 0)',
-			borderColor: 'rgb(10, 10, 10)'
-		};
+			chart.update();
 
-		meta.controller.removeHoverStyle(point);
-		expect(point._model.backgroundColor).toBe('rgb(0, 0, 0)');
-		expect(point._model.borderColor).toBe('rgb(10, 10, 10)');
-		expect(point._model.borderWidth).toBe(5.5);
-		expect(point._model.radius).toBe(4.4);
+			jasmine.triggerMouseEvent(chart, 'mousemove', point);
+			expect(point._model.backgroundColor).toBe('rgb(200, 100, 150)');
+			expect(point._model.borderColor).toBe('rgb(150, 50, 100)');
+			expect(point._model.borderWidth).toBe(8.4);
+			expect(point._model.radius).toBe(4.2);
+
+			jasmine.triggerMouseEvent(chart, 'mouseout', point);
+			expect(point._model.backgroundColor).toBe('rgb(100, 150, 200)');
+			expect(point._model.borderColor).toBe('rgb(50, 100, 150)');
+			expect(point._model.borderWidth).toBe(2);
+			expect(point._model.radius).toBe(3);
+		});
+
+		it ('should handle hover styles defined via element custom', function() {
+			var chart = this.chart;
+			var point = chart.getDatasetMeta(0).data[0];
+
+			point.custom = {
+				hoverBackgroundColor: 'rgb(200, 100, 150)',
+				hoverBorderColor: 'rgb(150, 50, 100)',
+				hoverBorderWidth: 8.4,
+				hoverRadius: 4.2
+			};
+
+			chart.update();
+
+			jasmine.triggerMouseEvent(chart, 'mousemove', point);
+			expect(point._model.backgroundColor).toBe('rgb(200, 100, 150)');
+			expect(point._model.borderColor).toBe('rgb(150, 50, 100)');
+			expect(point._model.borderWidth).toBe(8.4);
+			expect(point._model.radius).toBe(4.2);
+
+			jasmine.triggerMouseEvent(chart, 'mouseout', point);
+			expect(point._model.backgroundColor).toBe('rgb(100, 150, 200)');
+			expect(point._model.borderColor).toBe('rgb(50, 100, 150)');
+			expect(point._model.borderWidth).toBe(2);
+			expect(point._model.radius).toBe(3);
+		});
 	});
 
 	it('should allow 0 as a point border width', function() {

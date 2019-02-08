@@ -1,9 +1,30 @@
 'use strict';
 
+var defaults = require('../core/core.defaults');
 var helpers = require('./helpers.core');
 
+var valueOrDefault = helpers.valueOrDefault;
+
 /**
- * @namespace Chart.helpers.options
+ * Converts the given font object into a CSS font string.
+ * @param {Object} font - A font object.
+ * @return {String} The CSS font string. See https://developer.mozilla.org/en-US/docs/Web/CSS/font
+ * @private
+ */
+function toFontString(font) {
+	if (!font || helpers.isNullOrUndef(font.size) || helpers.isNullOrUndef(font.family)) {
+		return null;
+	}
+
+	return (font.style ? font.style + ' ' : '')
+		+ (font.weight ? font.weight + ' ' : '')
+		+ font.size + 'px '
+		+ font.family;
+}
+
+/**
+ * @alias Chart.helpers.options
+ * @namespace
  */
 module.exports = {
 	/**
@@ -62,5 +83,57 @@ module.exports = {
 			height: t + b,
 			width: l + r
 		};
+	},
+
+	/**
+	 * Parses font options and returns the font object.
+	 * @param {Object} options - A object that contains font options to be parsed.
+	 * @return {Object} The font object.
+	 * @todo Support font.* options and renamed to toFont().
+	 * @private
+	 */
+	_parseFont: function(options) {
+		var globalDefaults = defaults.global;
+		var size = valueOrDefault(options.fontSize, globalDefaults.defaultFontSize);
+		var font = {
+			family: valueOrDefault(options.fontFamily, globalDefaults.defaultFontFamily),
+			lineHeight: helpers.options.toLineHeight(valueOrDefault(options.lineHeight, globalDefaults.defaultLineHeight), size),
+			size: size,
+			style: valueOrDefault(options.fontStyle, globalDefaults.defaultFontStyle),
+			weight: null,
+			string: ''
+		};
+
+		font.string = toFontString(font);
+		return font;
+	},
+
+	/**
+	 * Evaluates the given `inputs` sequentially and returns the first defined value.
+	 * @param {Array[]} inputs - An array of values, falling back to the last value.
+	 * @param {Object} [context] - If defined and the current value is a function, the value
+	 * is called with `context` as first argument and the result becomes the new input.
+	 * @param {Number} [index] - If defined and the current value is an array, the value
+	 * at `index` become the new input.
+	 * @since 2.7.0
+	 */
+	resolve: function(inputs, context, index) {
+		var i, ilen, value;
+
+		for (i = 0, ilen = inputs.length; i < ilen; ++i) {
+			value = inputs[i];
+			if (value === undefined) {
+				continue;
+			}
+			if (context !== undefined && typeof value === 'function') {
+				value = value(context);
+			}
+			if (index !== undefined && helpers.isArray(value)) {
+				value = value[index];
+			}
+			if (value !== undefined) {
+				return value;
+			}
+		}
 	}
 };
